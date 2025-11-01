@@ -8,6 +8,14 @@
 
 #include "nodeDT.h"
 
+/*If bIsInitialized == FALSE, oNRoot must be NULL and ulCount == 0. 
+If ulCount == 0, then oNRoot == NULL.
+  If bIsInitialized == TRUE, ulCount must be the number of nodes in
+  the hierarchy rooted at oNRoot (which may be NULL if ulCount == 0). 
+  Returns TRUE if these conditions are met, FALSE otherwise, printing
+  an explanation to stderr in that case.
+*/
+
 
 /*
    Returns TRUE if oNNode represents a directory entry

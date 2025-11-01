@@ -41,6 +41,7 @@ int Path_dup(Path_T oPPath, Path_T *poPResult);
   * MEMORY_ERROR if memory could not be allocated to complete request
   * NO_SUCH_PATH if ulDepth is 0 or is greater than oPPath's depth
 */
+/* cuts off given path to given depth level and stores in poPREsult*/
 int Path_prefix(Path_T oPPath, size_t ulDepth, Path_T *poPResult);
 
 /* Destroys and frees all memory allocated for oPPath. */

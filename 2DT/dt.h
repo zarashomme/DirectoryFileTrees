@@ -23,6 +23,8 @@
    * ALREADY_IN_TREE if pcPath is already in the DT
    * MEMORY_ERROR if memory could not be allocated to complete request
 */
+/* now that path can have many children as long as root good shouldnt be conflicted
+not well formatted means like // stuff*/
 int DT_insert(const char *pcPath);
 
 /*
@@ -42,6 +44,7 @@ boolean DT_contains(const char *pcPath);
   * NO_SUCH_PATH if absolute path pcPath does not exist in the DT
   * MEMORY_ERROR if memory could not be allocated to complete request
 */
+/* removes node and entire subtree*/
 int DT_rm(const char *pcPath);
 
 /*
@@ -58,6 +61,7 @@ int DT_init(void);
   Returns INITIALIZATION_ERROR if not already initialized,
   and SUCCESS otherwise.
 */
+/* removes ALL contents and uninitializes */
 int DT_destroy(void);
 
 /*
@@ -71,6 +75,7 @@ int DT_destroy(void);
   Allocates memory for the returned string,
   which is then owned by client!
 */
+/* lexigraphic order for when being printed as to string*/
 char *DT_toString(void);
 
 #endif

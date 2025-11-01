@@ -1,0 +1,244 @@
+ 
+//INSERT 
+ 
+
+Breakpoint 7, BDT_insert (
+    pcPath=0x4052c0 "1root/2child/3grandchild")
+    at bdtGood.c:442
+442        Path_T oPPath = NULL;
+(gdb) next
+443        struct node *psFirstNew = NULL;
+(gdb) next
+444        struct node *psCurr = NULL;
+(gdb) ext
+Undefined command: "ext".  Try "help".
+(gdb) next
+446        size_t ulNewNodes = 0;
+(gdb) next
+448        assert(pcPath != NULL);
+(gdb) next
+451        if(!bIsInitialized)
+(gdb) next
+454        iStatus = Path_new(pcPath, &oPPath);
+(gdb) next
+455        if(iStatus != SUCCESS)
+(gdb) next
+459        iStatus= BDT_traversePath(oPPath, &psCurr);
+(gdb) next
+460        if(iStatus != SUCCESS)
+(gdb) next
+468        if(psCurr == NULL && psRoot != NULL) {
+(gdb) next
+473        ulDepth = Path_getDepth(oPPath);
+(gdb) next
+474        if(psCurr == NULL) /* new root! */
+(gdb) enxt
+Undefined command: "enxt".  Try "help".
+(gdb) next
+477           ulIndex = Path_getDepth(BDT_getPath(psCurr))+1;
+(gdb) next
+480           if(ulIndex == ulDepth+1 && !Path_comparePath(oPPath,
+(gdb) next
+488        while(ulIndex <= ulDepth) {
+(gdb) next
+489           Path_T oPPrefix = NULL;
+(gdb) next
+490           struct node *psNewNode = NULL;
+(gdb) next
+493           iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
+(gdb) next
+494           if(iStatus != SUCCESS) {
+(gdb) next
+502           iStatus = BDT_newNode(oPPrefix, psCurr, &psNewNode);
+(gdb) next
+503           if(iStatus != SUCCESS) {
+(gdb) next
+512           Path_free(oPPrefix);
+(gdb) next
+513           psCurr = psNewNode;
+(gdb) next
+514           ulNewNodes++;
+(gdb) next
+515           if(psFirstNew == NULL)
+(gdb) next
+516              psFirstNew = psCurr;
+(gdb) next
+517           ulIndex++;
+(gdb) next
+488        while(ulIndex <= ulDepth) {
+(gdb) next
+489           Path_T oPPrefix = NULL;
+(gdb) next
+490           struct node *psNewNode = NULL;
+(gdb) next
+493           iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
+(gdb) next
+494           if(iStatus != SUCCESS) {
+(gdb) next
+502           iStatus = BDT_newNode(oPPrefix, psCurr, &psNewNode);
+(gdb) next
+503           if(iStatus != SUCCESS) {
+(gdb) next
+512           Path_free(oPPrefix);
+(gdb) next
+513           psCurr = psNewNode;
+(gdb) next
+514           ulNewNodes++;
+(gdb) next
+515           if(psFirstNew == NULL)
+(gdb) next
+517           ulIndex++;
+(gdb) next
+488        while(ulIndex <= ulDepth) {
+(gdb) next
+520        Path_free(oPPath);
+(gdb) next
+522        if(psRoot == NULL)
+(gdb) next
+524        ulCount += ulNewNodes;
+(gdb) next
+526        return SUCCESS;
+(gdb) next
+527     }
+
+  BDT_insert (pcPath=0x405438 "1root")
+
+    at bdtBad3.c:442
+
+442        Path_T oPPath = NULL;
+
+443        struct node *psFirstNew = NULL;
+
+444        struct node *psCurr = NULL;
+
+446        size_t ulNewNodes = 0;
+448        assert(pcPath != NULL);
+451        if(!bIsInitialized)
+454        iStatus = Path_new(pcPath, &oPPath);
+
+455        if(iStatus != SUCCESS)
+459        iStatus= BDT_traversePath(oPPath, &psCurr);
+460        if(iStatus != SUCCESS)
+468        if(psCurr == NULL && psRoot != NULL) {
+
+473        ulDepth = Path_getDepth(oPPath);
+
+474        if(psCurr == NULL) /* new root! */
+
+475           ulIndex = 1;
+
+488        while(ulIndex <= ulDepth) {
+
+489           Path_T oPPrefix = NULL;
+490           struct node *psNewNode = NULL;
+493           iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
+494           if(iStatus != SUCCESS) {
+502           iStatus = BDT_newNode(oPPrefix, psCurr, &psNewNode);
+503           if(iStatus != SUCCESS) {
+512           Path_free(oPPrefix);
+513           psCurr = psNewNode;
+514           ulNewNodes++;
+515           if(psFirstNew == NULL)
+516              psFirstNew = psCurr;
+517           ulIndex++;
+488        while(ulIndex <= ulDepth) {
+520        Path_free(oPPath);
+522        if(psRoot == NULL)
+523           psRoot = psFirstNew;
+524        ulCount += ulNewNodes;
+526        return SUCCESS;
+527     }
+
+(gdb) this is contains:
+
+
+// CONTAINS
+BDT_contains (
+ bdtGood.c:531
+531        struct node *psFound = NULL;
+(gdb) next
+533        assert(pcPath != NULL);
+(gdb) next
+535        iStatus = BDT_findNode(pcPath, &psFound);
+(gdb) next
+536        return (boolean) (iStatus == SUCCESS);
+(gdb) next
+537     }
+
+// REMOVE
+BDT_rm (
+    pcPath=0x4052c0 "1root/2child/3grandchild")
+    at bdtGood.c:542
+542        struct node *psFound = NULL;
+(gdb) next
+544        assert(pcPath != NULL);
+(gdb) next
+546        iStatus = BDT_findNode(pcPath, &psFound);
+(gdb) next
+548        if(iStatus != SUCCESS)
+(gdb) next
+549            return iStatus;
+(gdb) next
+556     }
+(gdb) next
+main () at bdt_client.c:27
+27        assert((temp = BDT_toString()) == NULL);
+(gdb) next
+28        assert(BDT_destroy() == INITIALIZATION_ERROR);
+(gdb) next
+34        assert(BDT_init() == SUCCESS);
+(gdb) next
+35        assert(BDT_contains("") == FALSE);
+(gdb) next
+36        assert(BDT_contains("1root") == FALSE);
+(gdb) next
+37        assert((temp = BDT_toString()) != NULL);
+(gdb) next
+38        assert(!strcmp(temp,""));
+(gdb) next
+39        free(temp)
+
+
+//TO STRING
+ BDT_toString () at bdtGood.c:651
+651        size_t totalStrlen = 1;
+(gdb) next
+652        char *result = NULL;
+(gdb) next
+654        if(!bIsInitialized)
+(gdb) next
+657        nodes = DynArray_new(ulCount);
+(gdb) next
+658        (void) BDT_preOrderTraversal(psRoot, nodes, 0);
+(gdb) next
+660        DynArray_map(nodes, (void (*)(void *, void*)) BDT_strlenAccumulate,
+(gdb) next
+663        result = malloc(totalStrlen);
+(gdb) next
+664        if(result == NULL) {
+(gdb) next
+668        *result = '\0';
+(gdb) next
+670        DynArray_map(nodes, (void (*)(void *, void*)) BDT_strcatAccumulate,
+(gdb) next
+673        DynArray_free(nodes);
+(gdb) next
+675        return result;
+(gdb) next
+
+
+// DESTROY
+BDT_destroy () at bdtGood.c:573
+573        if(!bIsInitialized)
+(gdb) next
+576        if(psRoot) {
+(gdb) next
+577           ulCount -= BDT_freeSubtree(psRoot);
+(gdb) next
+578           psRoot = NULL;
+(gdb) next
+581        bIsInitialized = FALSE;
+(gdb) next
+583        return SUCCESS;
+(gdb) next
+584     }

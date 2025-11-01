@@ -142,14 +142,13 @@ identify the bug itself, only its location, but note that this must be
 the location of the underlying error, which is not necessarily where
 the error manifests itself or is "noticed" by the client.
 
-
       Executable         Function with the underlying error
 ===============================================================
-         ./bdtBad1        
+         ./bdtBad1        BDT_insert() - did not verify that the tree was initialized
 ---------------------------------------------------------------
-         ./bdtBad2        
+         ./bdtBad2        BDT_rm() - did not free the memory of the parent pointer at line 143
 ---------------------------------------------------------------
-         ./bdtBad3        
+         ./bdtBad3        BDT_insert() 
 ---------------------------------------------------------------
          ./bdtBad4        
 ---------------------------------------------------------------
@@ -160,6 +159,20 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
+The DT implementation has several areas that could be improved:
 
+1. **Redundant memory allocations in Node_new**: The function creates a duplicate of the path using Path_dup, but the Path_T passed in could potentially already be owned by the caller, leading to unnecessary duplication. The API could be clearer about path ownership semantics.
+
+2. **Potential memory leak in error cases**: In DT_insert, when error conditions occur after creating nodes but before updating the DT state, the code calls Node_free on oNFirstNew. However, if multiple nodes were created, only the first is freed. The DT_count state may become inconsistent if Node_free fails partway through.
+
+3. **Overly verbose variable naming**: The Hungarian notation (oNParent, oPPath, etc.) makes the code harder to read. Modern C practice favors simpler names like parent, path, result.
+
+4. **Inconsistent error handling in DT_contains**: The function returns FALSE for both "not found" and actual errors, making it impossible for the client to distinguish between these cases. This violates the principle of fail-fast error reporting.
+
+5. **Missing initializer in DT_init**: The function has an assert before checking if already initialized, which assumes the initial state is valid. This could crash if called on uninitialized memory.
+
+6. **Inefficient DT_toString implementation**: The function traverses the tree twice (once for counting string lengths, once for copying) and uses strcat which is O(n) for each append, making the overall complexity worse than necessary.
+
+7. **Lack of transactional semantics**: DT_insert creates nodes and may fail partway through, leaving the data structure in an intermediate state. The cleanup with Node_free may not fully restore the original state.
 
 ------------------------------------------------------------------------

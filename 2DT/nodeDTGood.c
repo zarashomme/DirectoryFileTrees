@@ -171,6 +171,7 @@ size_t Node_free(Node_T oNNode) {
 
    /* remove from parent's list */
    if(oNNode->oNParent != NULL) {
+      /* will be zero if found */
       if(DynArray_bsearch(
             oNNode->oNParent->oDChildren,
             oNNode, &ulIndex,

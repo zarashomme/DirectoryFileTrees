@@ -47,6 +47,7 @@ static size_t ulCount;
   * CONFLICTING_PATH if the root's path is not a prefix of oPPath
   * MEMORY_ERROR if memory could not be allocated to complete request
 */
+/* traverse and return node of farthest depth found of given path*/
 static int DT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    int iStatus;
    Path_T oPPrefix = NULL;
@@ -120,6 +121,7 @@ static int DT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
   * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
   * MEMORY_ERROR if memory could not be allocated to complete request
  */
+ /* returns node(of given path) if found and null if not w error status */
 static int DT_findNode(const char *pcPath, Node_T *poNResult) {
    Path_T oPPath = NULL;
    Node_T oNFound = NULL;
@@ -174,6 +176,7 @@ int DT_insert(const char *pcPath) {
    size_t ulDepth, ulIndex;
    size_t ulNewNodes = 0;
 
+
    assert(pcPath != NULL);
    assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
 
@@ -186,6 +189,7 @@ int DT_insert(const char *pcPath) {
       return iStatus;
 
    /* find the closest ancestor of oPPath already in the tree */
+   /* furthest ancestor node stored in oNcurr current node */
    iStatus= DT_traversePath(oPPath, &oNCurr);
    if(iStatus != SUCCESS)
    {
@@ -195,11 +199,14 @@ int DT_insert(const char *pcPath) {
 
    /* no ancestor node found, so if root is not NULL,
       pcPath isn't underneath root. */
+      /* if common ancestor isnt found that means they dont share root root( under assumption there is root now )
+      if there is no root then its fine cause you are making one  */
    if(oNCurr == NULL && oNRoot != NULL) {
       Path_free(oPPath);
       return CONFLICTING_PATH;
    }
 
+   /* get depth of path of nodeto be theotreitclaly inserted */
    ulDepth = Path_getDepth(oPPath);
    if(oNCurr == NULL) /* new root! */
       ulIndex = 1;
@@ -214,17 +221,18 @@ int DT_insert(const char *pcPath) {
       }
    }
 
-   /* starting at oNCurr, build rest of the path one level at a time */
+   /* starting at oNCurr(current already found depth), build rest of the path one level at a time */
    while(ulIndex <= ulDepth) {
       Path_T oPPrefix = NULL;
       Node_T oNNewNode = NULL;
 
-      /* generate a Path_T for this level */
+      /* generate a Path_T for this level for the now parts that dont exist*/
       iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
       if(iStatus != SUCCESS) {
-         Path_free(oPPath);
+         Path_free(oPPath); // free original path object string 
          if(oNFirstNew != NULL)
             (void) Node_free(oNFirstNew);
+         // check if node inserts is good even here if freeing correctly 
          assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
          return iStatus;
       }
@@ -243,6 +251,7 @@ int DT_insert(const char *pcPath) {
       /* set up for next level */
       Path_free(oPPrefix);
       oNCurr = oNNewNode;
+      /* make sure to increment to match correct configuration*/
       ulNewNodes++;
       if(oNFirstNew == NULL)
          oNFirstNew = oNCurr;
@@ -282,6 +291,7 @@ int DT_rm(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
+   /* remove the found node and its subtree */
    ulCount -= Node_free(oNFound);
    if(ulCount == 0)
       oNRoot = NULL;
@@ -296,6 +306,7 @@ int DT_init(void) {
    if(bIsInitialized)
       return INITIALIZATION_ERROR;
 
+   /* when initialized should have null root and a count of zero*/
    bIsInitialized = TRUE;
    oNRoot = NULL;
    ulCount = 0;
@@ -306,12 +317,12 @@ int DT_init(void) {
 
 int DT_destroy(void) {
    assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
-
+   /* faulty implementation may not have implementation done correctly*/
    if(!bIsInitialized)
       return INITIALIZATION_ERROR;
 
    if(oNRoot) {
-      ulCount -= Node_free(oNRoot);
+      ulCount -= Node_free(oNRoot); // should free entire tree and returns number of nodes freed
       oNRoot = NULL;
    }
 
