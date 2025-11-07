@@ -120,7 +120,7 @@ int main(void) {
   assert(BDT_rm("1root") == NO_SUCH_PATH);
   assert(BDT_rm("1anotherroot") == NO_SUCH_PATH);
   /*assert((temp = BDT_toString()) != NULL);*/
-  a*ssert(!strcmp(temp,""));*/
+  /*assert(!strcmp(temp,""));*/
   /*free(temp);*/
 
   /* removing a first child should cause the second child to become
