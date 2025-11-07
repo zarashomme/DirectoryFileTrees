@@ -35,7 +35,7 @@ int main(void) {
   assert(BDT_contains("") == FALSE);
   assert(BDT_contains("1root") == FALSE);
   /*valgrind error: !!! assert((temp = BDT_toString()) != NULL);*/
-   valgrind error: !!! assert(!strcmp(temp,""));
+  assert(!strcmp(temp,""));
   /*valgrind error:!!! free(temp);*/
 
   /* A valid path must not:
