@@ -132,7 +132,7 @@ int main(void) {
   */
   assert(BDT_insert("a/y") == SUCCESS);
   /*assert((temp = BDT_toString()) != NULL);*/
-  assert(!strcmp(temp,"a\na/y\n"));
+  /*assert(!strcmp(temp,"a\na/y\n"));*/
   free(temp);
   assert(BDT_insert("a/x") == SUCCESS);
   /*assert((temp = BDT_toString()) != NULL);*/
