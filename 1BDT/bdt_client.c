@@ -77,7 +77,7 @@ int main(void) {
   assert(BDT_contains("1root/2no") == FALSE);
   assert(BDT_contains("1root/2no/3nay") == FALSE);
   assert(BDT_contains("1root/2no/3nay/4never") == FALSE);
-  /*valgrind error:!!! assert((temp = BDT_toString()) != NULL);*/
+  ((temp = BDT_toString()) != NULL);
   fprintf(stderr, "Checkpoint 1:\n%s\n", temp);
   /*free(temp);*/
 
