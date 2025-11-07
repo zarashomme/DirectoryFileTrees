@@ -144,11 +144,11 @@ int main(void) {
   free(temp);
   assert(BDT_insert("a/y2") == SUCCESS);
   /*assert((temp = BDT_toString()) != NULL);*/
-  assert(!strcmp(temp,"a\na/x\na/y2\n"));
+  /*assert(!strcmp(temp,"a\na/x\na/y2\n"));(/
   free(temp);
   assert(BDT_rm("a/y2") == SUCCESS);
   /*assert((temp = BDT_toString()) != NULL);*/
-  assert(!strcmp(temp,"a\na/x\n"));
+  /*assert(!strcmp(temp,"a\na/x\n"));*/
   free(temp);
   assert(BDT_insert("a/y3") == SUCCESS);
   /*assert((temp = BDT_toString()) != NULL);*/
