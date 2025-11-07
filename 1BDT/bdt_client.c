@@ -34,7 +34,7 @@ int main(void) {
   assert(BDT_init() == SUCCESS);
   assert(BDT_contains("") == FALSE);
   assert(BDT_contains("1root") == FALSE);
-  /*valgrind error: !!! assert((temp = BDT_toString()) != NULL);*/
+  assert((temp = BDT_toString()) != NULL);
   assert(!strcmp(temp,""));
   /*valgrind error:!!! free(temp);*/
 
