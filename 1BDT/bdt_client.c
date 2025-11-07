@@ -91,7 +91,7 @@ int main(void) {
   assert(BDT_insert("1root/2second/3grandchild") == ALREADY_IN_TREE);
   assert(BDT_insert("1root/2second/3grandchild/1root") == SUCCESS);
   assert(BDT_contains("1root/2second/3grandchild/1root") == TRUE);
-  valgrind error: assert((temp = BDT_toString()) != NULL); 
+  assert((temp = BDT_toString()) != NULL); 
   fprintf(stderr, "Checkpoint 2:\n%s\n", temp);
   free(temp);
 
