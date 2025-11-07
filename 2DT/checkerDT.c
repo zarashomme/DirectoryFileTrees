@@ -82,7 +82,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    if (oNodeParent != NULL) {
       if (ulNodeDepth != ulParentDepth + 1) {
          fprintf(stderr,
-                 "Child depth is not parent depth + 1: Child: (%s) depth %lu, Parent: (%s) depth %lu\n",
+                 "Child depth is not parent depth + 1: Child:"
+                 "(%s) depth %lu, Parent: (%s) depth %lu\n",
                  Path_getPathname(oNodePath), (unsigned long)ulNodeDepth,
                  Path_getPathname(oParentPath), (unsigned long)ulParentDepth);
          return FALSE;
@@ -90,7 +91,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
       if (Path_getSharedPrefixDepth(oParentPath, oNodePath) != ulNodeDepth - 1) {
          fprintf(stderr,
-                 "Incorrect parent-child path linkage: Parent node (%s) is not the immediate prefix path of child path (%s)\n",
+                 "Incorrect parent-child path linkage: Parent node (%s)" 
+                 "is not the immediate prefix path of child path (%s)\n",
                  Path_getPathname(oParentPath), Path_getPathname(oNodePath));
          return FALSE;
       }
@@ -101,12 +103,14 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    for (ulChildIdx = 0; ulChildIdx < Node_getNumChildren(oNNode); ulChildIdx++) {
       int iStatus = Node_getChild(oNNode, ulChildIdx, &oNodeChild);
       if (iStatus != SUCCESS) {
-         fprintf(stderr, "Child at index %lu is not retrievable\n", (unsigned long)ulChildIdx);
+         fprintf(stderr, "Child at index %lu is not retrievable\n", 
+            (unsigned long)ulChildIdx);
          return FALSE;
       }
 
       if (oNodeChild == NULL) {
-         fprintf(stderr, "Node_getChild returned a NULL child at index %lu\n", (unsigned long)ulChildIdx);
+         fprintf(stderr, "Node_getChild returned a NULL child at index %lu\n", 
+            (unsigned long)ulChildIdx);
          return FALSE;
       }
 
@@ -123,7 +127,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          if (oNodePath != NULL)
             thisPathStr = Path_getPathname(oNodePath);
          fprintf(stderr,
-                 "Child's parent pointer does not point back to node that has this child: Child path (%s) parent path (%s) vs this node path (%s)\n",
+                  "Child's parent pointer does not point back to node"
+                 "that has this child: Child path (%s) parent path"
+                 "(%s) vs this node path (%s)\n",
                  childPathStr, childParentPathStr, thisPathStr);
          return FALSE;
       }
@@ -137,7 +143,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
       if (ulNodeDepth != ulChildDepth - 1) {
          fprintf(stderr,
-                 "Child depth is not parent depth + 1: Child: (%s) depth %lu, Parent: (%s) depth %lu\n",
+                 "Child depth is not parent depth + 1:"
+                 "Child: (%s) depth %lu, Parent: (%s) depth %lu\n",
                  Path_getPathname(oChildPath), (unsigned long)ulChildDepth,
                  Path_getPathname(oNodePath), (unsigned long)ulNodeDepth);
          return FALSE;
@@ -145,7 +152,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
       if (Path_getSharedPrefixDepth(oNodePath, oChildPath) != ulNodeDepth) {
          fprintf(stderr,
-                 "Incorrect parent-child path linkage: Parent node (%s) is not the immediate prefix path of child path (%s)\n",
+                 "Incorrect parent-child path linkage: Parent node (%s) "
+                 "is not the immediate prefix path of child path (%s)\n",
                  Path_getPathname(oNodePath), Path_getPathname(oChildPath));
          return FALSE;
       }
@@ -154,8 +162,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       if (oPrevChildPath != NULL) {
          int iCmp = Path_comparePath(oPrevChildPath, oChildPath);
          if (iCmp > 0) {
-            fprintf(stderr, "Children not in lexicographic order: (%s) incorrectly precedes (%s)\n",
-                    Path_getPathname(oPrevChildPath), Path_getPathname(oChildPath));
+            fprintf(stderr, "Children not in lexicographic order: (%s)"
+               "incorrectly precedes (%s)\n",
+               Path_getPathname(oPrevChildPath), Path_getPathname(oChildPath));
             return FALSE;
          }
          if (iCmp == 0) {
@@ -236,7 +245,8 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    /* No root w non-zero count Invariant Check: 
    if initialized, root must not be NULL if count > 0 */
    if(ulCount > 0 && oNRoot == NULL) {
-      fprintf(stderr, "Initialized with count %lu but root is NULL\n", (unsigned long)ulCount);
+      fprintf(stderr, "Initialized with count %lu but root is NULL\n", 
+         (unsigned long)ulCount);
       return FALSE;
    }
 
@@ -257,7 +267,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    /* Check: the ulCount must equal 
    the actual number of nodes in the tree( ulActualCount)*/
    if(ulActualCount != ulCount) {
-      fprintf(stderr, "Count inequality: tree has %lu nodes but ulCount is %lu \n", (unsigned long)ulActualCount, (unsigned long)ulCount);
+      fprintf(stderr, "Count inequality: tree has %lu nodes but" 
+         "ulCount is %lu \n", 
+         (unsigned long)ulActualCount, (unsigned long)ulCount);
       return FALSE;
    }
 
