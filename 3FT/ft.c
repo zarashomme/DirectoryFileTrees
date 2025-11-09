@@ -408,13 +408,16 @@ int FT_insertFile(const char *pcPath, void *pvContents,
 
       /* check to insert the final file or directories before */ 
       if (bStopAtFile) {
-         iStatus = Node_new( oPPrefix, oNCurr, TRUE, pvContents, 
+         iStatus = Node_new(oPPrefix, oNCurr, TRUE, pvContents, 
          ulLength, &oNNewNode);
       } 
       else {
          iStatus = Node_new(oPPrefix, oNCurr, FALSE, 
          NULL, 0, &oNNewNode);
       } 
+      
+      /* Free oPPrefix as it's no longer needed */
+      Path_free(oPPrefix);
      
       if(iStatus != SUCCESS) {
          Path_free(oPPath);
@@ -423,7 +426,6 @@ int FT_insertFile(const char *pcPath, void *pvContents,
          assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));
          return iStatus;
       }
-      Path_free(oPPrefix);
       ulNewNodes++;
       /* tracks first node for freeing if mem error*/
       if(oNFirstNew == NULL)
