@@ -26,6 +26,7 @@ boolean CheckerFT_Node_isValid(Node_T oNNode) {
    Path_T oPrevChildPath = NULL;
    
    size_t ulChildIdx = 0;
+   size_t ulChildDepth = 0;
    size_t ulNodeDepth = 0;
    size_t ulParentDepth = 0;
 
@@ -264,14 +265,14 @@ boolean CheckerFT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* preceptor: check if this is an actual invariant or allowed
    it would just be a 1 value tree*/
-   if(oNRoot != NUll && Node_isFile(oNRoot)) {
+   if(oNRoot != NULL && Node_isFile(oNRoot)) {
       fprintf(stderr, "Root node is a file, which is invalid \n");
       return FALSE;
    }
 
    /* Full Node Invariant Check: performs a preorder traversal to 
    recursively counts all nodes*/
-   if(!CheckerDT_treeCheck(oNRoot, &ulActualCount)){ 
+   if(!CheckerFT_treeCheck(oNRoot, &ulActualCount)){ 
       /* refer to CheckerDT_treeCheck for printed error message*/
       return FALSE;
    }
