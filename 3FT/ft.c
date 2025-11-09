@@ -57,7 +57,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest,
    int iStatus;
    Path_T oPPrefix = NULL;
    Node_T oNCurr;
-   Node_T oNChild = NULL
+   Node_T oNChild = NULL;
    size_t ulDepth;
    size_t i;
    size_t ulChildID;
@@ -66,6 +66,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest,
    assert(poNFurthest != NULL);
    assert(pbFoundFile != NULL);
    *pbFoundFile = FALSE;
+   ulDepth = Path_getDepth(oPPath);
 
    /* root is NULL -> won't find anything */
    if(oNRoot == NULL) {
@@ -91,7 +92,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest,
    oPPrefix = NULL;
 
    oNCurr = oNRoot;
-   ulDepth = Path_getDepth(oPPath);
 
    for(i = 2; i <= ulDepth; i++) {
       if(Node_isFile(oNCurr)) {
@@ -312,8 +312,6 @@ boolean FT_containsDir(const char *pcPath) {
 int FT_rmDir(const char *pcPath) {
    int iStatus;
    Node_T oNFound = NULL;
-   size_t ulRemoved;
-   boolean bWasRoot;
 
    assert(pcPath != NULL);
    assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount));
@@ -408,7 +406,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
          return iStatus;
       }
 
-      // check to insert the final file or directories before 
+      /* check to insert the final file or directories before */ 
       if (bStopAtFile) {
          iStatus = Node_new( oPPrefix, oNCurr, TRUE, pvContents, 
          ulLength, &oNNewNode);
